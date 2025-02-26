@@ -11,7 +11,7 @@ import SwiftUI
 struct PhotoBoyApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            PhotoBoyView()
         }
     }
 }
