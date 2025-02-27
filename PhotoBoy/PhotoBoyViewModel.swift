@@ -20,7 +20,7 @@ final class PhotoBoyViewModel: ObservableObject {
     
     // MARK: - Published Properties
     
-    @Published var presentingImage: CGImage? = UIImage(named: "SampleImage")?.cgImage
+    @Published var presentingImage: CGImage? = nil// UIImage(named: "SampleImage")?.cgImage
     @Published var error: Error? = nil
     @Published var selectedImage: PhotosPickerItem?
     @Published var contrast: CGFloat = 1
