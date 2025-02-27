@@ -1,6 +1,6 @@
 //
 //  ActivityIndicator.swift
-//  PhotoBoy
+//  PixelBoy
 //
 //  Created by Brandon Aubrey on 2/27/25.
 //

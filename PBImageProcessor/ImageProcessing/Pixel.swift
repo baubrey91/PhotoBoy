@@ -1,6 +1,6 @@
 //
 //  Pixel.swift
-//  PhotoBoy
+//  PixelBoy
 //
 //  Created by Brandon Aubrey on 2/24/25.
 //

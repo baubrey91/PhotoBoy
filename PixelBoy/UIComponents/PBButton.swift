@@ -1,6 +1,6 @@
 //
 //  PBButton.swift
-//  PhotoBoy
+//  PixelBoy
 //
 //  Created by Brandon Aubrey on 2/20/25.
 //

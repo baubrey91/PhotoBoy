@@ -1,6 +1,6 @@
 //
-//  PhotoBoyView.swift
-//  PhotoBoy
+//  PixelBoyView.swift
+//  PixelBoy
 //
 //  Created by Brandon Aubrey on 2/20/25.
 //
@@ -9,12 +9,12 @@ import SwiftUI
 import PhotosUI
 
 #Preview {
-    PhotoBoyView()
+    PixelBoyView()
 }
 
-struct PhotoBoyView: View {
+struct PixelBoyView: View {
     
-    @StateObject private var viewModel = PhotoBoyViewModel()
+    @StateObject private var viewModel = PixelBoyViewModel()
     @State private var showingOptions = false
 
     var body: some View {

@@ -1,52 +1,60 @@
 //
-//  PhotoBoyTests.swift
-//  PhotoBoyTests
+//  PixelBoyTests.swift
+//  PixelBoyTests
 //
 //  Created by Brandon Aubrey on 2/20/25.
 //
 
 import Testing
 import UIKit
-@testable import PhotoBoy
+@testable import PixelBoy
 
-struct PhotoBoyTests {
-    
+struct PixelBoyTests {
     
     @Suite("Processing Tests") struct ImageProcessingTests {
-        let image = UIImage(systemName: "wave.3.right")!
+        
+        func importImage(viewModel: PixelBoyViewModel) {
+            // Crop cannot be handled in tests
+            // Hack for now later import proper image that can crop
+            let image = UIImage(systemName: "wave.3.right")!.cgImage!
+            viewModel.selectButtonAction(selectButtonObject: image)
+            viewModel.originalImage = nil
+            viewModel.error = nil
+            viewModel.presentingImage = image
+        }
         
         @Test func aButtonNoImage() async throws {
-            let viewModel = PhotoBoyViewModel()
+            let viewModel = PixelBoyViewModel()
             viewModel.aButtonAction()
             #expect(viewModel.presentingImage == nil)
             #expect(viewModel.originalImage == nil)
         }
         
         @Test func bButtonNoImage() async throws {
-            let viewModel = PhotoBoyViewModel()
+            let viewModel = PixelBoyViewModel()
             viewModel.bButtonAction()
             #expect(viewModel.presentingImage == nil)
             #expect(viewModel.originalImage == nil)
         }
         
         @Test func processImage() async throws {
-            let viewModel = PhotoBoyViewModel()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            let viewModel = PixelBoyViewModel()
+            importImage(viewModel: viewModel)
             viewModel.aButtonAction()
             #expect(viewModel.originalImage != nil)
         }
         
         @Test func removeProcessedImage() async throws {
-            let viewModel = PhotoBoyViewModel()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            let viewModel = PixelBoyViewModel()
+            importImage(viewModel: viewModel)
             viewModel.aButtonAction()
             viewModel.bButtonAction()
             #expect(viewModel.originalImage == nil)
         }
         
         @Test func removeOriginalImage() async throws {
-            let viewModel = PhotoBoyViewModel()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            let viewModel = PixelBoyViewModel()
+            importImage(viewModel: viewModel)
             viewModel.aButtonAction()
             viewModel.bButtonAction()
             viewModel.bButtonAction()
@@ -54,36 +62,36 @@ struct PhotoBoyTests {
         }
         
         @Test func pickerPickerProcess() async throws {
-            let viewModel = PhotoBoyViewModel()
-            viewModel.selectButtonAction(selectButtonObject: image)
-            viewModel.selectButtonAction(selectButtonObject: image)
+            let viewModel = PixelBoyViewModel()
+            importImage(viewModel: viewModel)
+            importImage(viewModel: viewModel)
             viewModel.aButtonAction()
             #expect(viewModel.presentingImage != nil)
             #expect(viewModel.originalImage != nil)
         }
         
         @Test func pickerProcessPicker() async throws {
-            let viewModel = PhotoBoyViewModel()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            let viewModel = PixelBoyViewModel()
+            importImage(viewModel: viewModel)
             viewModel.aButtonAction()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            importImage(viewModel: viewModel)
             #expect(viewModel.presentingImage != nil)
             #expect(viewModel.originalImage == nil)
         }
         
         @Test func pickerProcessRemovePicker() async throws {
-            let viewModel = PhotoBoyViewModel()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            let viewModel = PixelBoyViewModel()
+            importImage(viewModel: viewModel)
             viewModel.aButtonAction()
             viewModel.bButtonAction()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            importImage(viewModel: viewModel)
             #expect(viewModel.presentingImage != nil)
             #expect(viewModel.originalImage == nil)
         }
         
         @Test func pickerProcessRemoveRemove() async throws {
-            let viewModel = PhotoBoyViewModel()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            let viewModel = PixelBoyViewModel()
+            importImage(viewModel: viewModel)
             viewModel.aButtonAction()
             viewModel.bButtonAction()
             viewModel.bButtonAction()
@@ -92,21 +100,21 @@ struct PhotoBoyTests {
         }
         
         @Test func pickerProcessRemoveRemovePicker() async throws {
-            let viewModel = PhotoBoyViewModel()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            let viewModel = PixelBoyViewModel()
+            importImage(viewModel: viewModel)
             viewModel.aButtonAction()
             viewModel.bButtonAction()
             viewModel.bButtonAction()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            importImage(viewModel: viewModel)
             #expect(viewModel.presentingImage != nil)
             #expect(viewModel.originalImage == nil)
         }
         
         @Test func pickerProcessPickerProcess() async throws {
-            let viewModel = PhotoBoyViewModel()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            let viewModel = PixelBoyViewModel()
+            importImage(viewModel: viewModel)
             viewModel.aButtonAction()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            importImage(viewModel: viewModel)
             viewModel.aButtonAction()
             #expect(viewModel.presentingImage != nil)
             #expect(viewModel.originalImage != nil)
@@ -114,10 +122,18 @@ struct PhotoBoyTests {
     }
     
     @Suite("Test Directional Pad Actions") struct DirectionPadTests {
-        let image = UIImage(systemName: "wave.3.right")!
+        
+        func importImage(viewModel: PixelBoyViewModel) {
+            // Crop cannot be handled in tests
+            let image = UIImage(systemName: "wave.3.right")!.cgImage!
+            viewModel.selectButtonAction(selectButtonObject: image)
+            viewModel.originalImage = nil
+            viewModel.error = nil
+            viewModel.presentingImage = image
+        }
         
         @Test func testNoChangeOnNilImageContrast() async throws {
-            let viewModel = PhotoBoyViewModel()
+            let viewModel = PixelBoyViewModel()
             viewModel.directionPadAction(direction: .right)
             #expect(viewModel.contrast == 1.0)
             viewModel.directionPadAction(direction: .left)
@@ -126,7 +142,7 @@ struct PhotoBoyTests {
         }
         
         @Test func testNoChangeOnNilImageBrightness() async throws {
-            let viewModel = PhotoBoyViewModel()
+            let viewModel = PixelBoyViewModel()
             viewModel.directionPadAction(direction: .up)
             #expect(viewModel.brightness == 0.0)
             viewModel.directionPadAction(direction: .down)
@@ -135,8 +151,8 @@ struct PhotoBoyTests {
         }
 
         @Test func testContrastChange() async throws {
-            let viewModel = PhotoBoyViewModel()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            let viewModel = PixelBoyViewModel()
+            importImage(viewModel: viewModel)
             viewModel.directionPadAction(direction: .right)
             #expect(viewModel.contrast == 1.1)
             viewModel.directionPadAction(direction: .left)
@@ -145,8 +161,8 @@ struct PhotoBoyTests {
         }
         
         @Test func testBrightnessChange() async throws {
-            let viewModel = PhotoBoyViewModel()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            let viewModel = PixelBoyViewModel()
+            importImage(viewModel: viewModel)
             viewModel.directionPadAction(direction: .up)
             #expect(viewModel.brightness == 0.1)
             viewModel.directionPadAction(direction: .down)
@@ -155,8 +171,8 @@ struct PhotoBoyTests {
         }
         
         @Test func testBrightnessUpperLimit() async throws {
-            let viewModel = PhotoBoyViewModel()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            let viewModel = PixelBoyViewModel()
+            importImage(viewModel: viewModel)
             for _ in 0..<15 {
                 viewModel.directionPadAction(direction: .up)
             }
@@ -164,8 +180,8 @@ struct PhotoBoyTests {
         }
         
         @Test func testBrightnessLowerLimit() async throws {
-            let viewModel = PhotoBoyViewModel()
-            viewModel.selectButtonAction(selectButtonObject: image)
+            let viewModel = PixelBoyViewModel()
+            importImage(viewModel: viewModel)
             for _ in 0..<15 {
                 viewModel.directionPadAction(direction: .down)
             }

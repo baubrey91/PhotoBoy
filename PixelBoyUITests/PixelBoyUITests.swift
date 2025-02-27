@@ -1,13 +1,13 @@
 //
-//  PhotoBoyUITests.swift
-//  PhotoBoyUITests
+//  PixelBoyUITests.swift
+//  PixelBoyUITests
 //
 //  Created by Brandon Aubrey on 2/20/25.
 //
 
 import XCTest
 
-final class PhotoBoyUITests: XCTestCase {
+final class PixelBoyUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

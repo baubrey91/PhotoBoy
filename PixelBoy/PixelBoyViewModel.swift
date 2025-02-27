@@ -1,6 +1,6 @@
 //
-//  PhotoBoyViewModel.swift
-//  PhotoBoy
+//  PixelBoyViewModel.swift
+//  PixelBoy
 //
 //  Created by Brandon Aubrey on 2/20/25.
 //
@@ -9,7 +9,7 @@ import SwiftUI
 import PhotosUI
 import PBImageProcessor
 
-final class PhotoBoyViewModel: NSObject, ObservableObject {
+final class PixelBoyViewModel: NSObject, ObservableObject {
     
     // MARK: - Enums
     
@@ -169,7 +169,7 @@ final class PhotoBoyViewModel: NSObject, ObservableObject {
     }
 }
 
-private extension PhotoBoyViewModel {
+private extension PixelBoyViewModel {
     
     @discardableResult
     func resetNotNeeded() -> Bool {

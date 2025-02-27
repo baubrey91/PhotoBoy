@@ -1,13 +1,13 @@
 //
-//  PhotoBoyUITestsLaunchTests.swift
-//  PhotoBoyUITests
+//  PixelBoyUITestsLaunchTests.swift
+//  PixelBoyUITests
 //
 //  Created by Brandon Aubrey on 2/20/25.
 //
 
 import XCTest
 
-final class PhotoBoyUITestsLaunchTests: XCTestCase {
+final class PixelBoyUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
