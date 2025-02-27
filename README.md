@@ -21,9 +21,9 @@ The image processing is done in three steps
 
 
 ## Sample 
-| Home | Imported | Processed|
-|------|------|------|
-|![Simulator Screenshot - iPhone 16 Pro - 2025-02-27 at 10 27 38](https://github.com/user-attachments/assets/896e91a4-6409-43f4-bd7a-6b469ffb9006)|![Simulator Screenshot - iPhone 16 Pro - 2025-02-27 at 10 27 47](https://github.com/user-attachments/assets/c367888f-6bc0-47e5-9171-56dc48179f05)|![Simulator Screenshot - iPhone 16 Pro - 2025-02-27 at 10 28 17](https://github.com/user-attachments/assets/ace1a433-f765-4313-8eda-d3103a9d9c49)|
+| Imported | Processed|
+|------|------|
+|![Simulator Screenshot - iPhone 16 Pro - 2025-02-27 at 10 27 47](https://github.com/user-attachments/assets/c367888f-6bc0-47e5-9171-56dc48179f05)|![Simulator Screenshot - iPhone 16 Pro - 2025-02-27 at 10 28 17](https://github.com/user-attachments/assets/ace1a433-f765-4313-8eda-d3103a9d9c49)|
 
 ## Video
 https://github.com/user-attachments/assets/d7eb4d07-350d-4fa8-bae6-5a4d5b171ce3
@@ -36,9 +36,9 @@ https://github.com/user-attachments/assets/d7eb4d07-350d-4fa8-bae6-5a4d5b171ce3
 
 
 ## Other
-| Splash Screenn| Error Screen|
-|------|------|
-|![Simulator Screenshot - iPhone 16 Pro - 2025-02-27 at 10 37 01](https://github.com/user-attachments/assets/e218051c-f8cb-4473-8d20-cfbac6574eb3)|![Simulator Screenshot - iPhone 16 Pro - 2025-02-27 at 10 37 04](https://github.com/user-attachments/assets/5d01e27b-79b8-4459-921c-e262b095add6)|
+| Home | Splash Screenn| Error Screen|
+|------|------|------|
+|![Simulator Screenshot - iPhone 16 Pro - 2025-02-27 at 10 27 38](https://github.com/user-attachments/assets/896e91a4-6409-43f4-bd7a-6b469ffb9006)|![Simulator Screenshot - iPhone 16 Pro - 2025-02-27 at 10 37 01](https://github.com/user-attachments/assets/e218051c-f8cb-4473-8d20-cfbac6574eb3)|![Simulator Screenshot - iPhone 16 Pro - 2025-02-27 at 10 37 04](https://github.com/user-attachments/assets/5d01e27b-79b8-4459-921c-e262b095add6)|
 
 
 ## Style 
