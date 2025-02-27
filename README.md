@@ -5,6 +5,9 @@ Photo processing app that lets you import images and turns them into "8-Bit Styl
 - Import images
 - Adjust contrast
 - Adjust brightness
+- Sound when processing or deleting
+- Animation when processing
+- Power indicator when processed
 - Save to photo librar
 - Share
 - Unit Tests
@@ -21,6 +24,9 @@ The image processing is done in three steps
 | Home | Imported | Processed|
 |------|------|------|
 |![Simulator Screenshot - iPhone 16 Pro - 2025-02-27 at 10 27 38](https://github.com/user-attachments/assets/896e91a4-6409-43f4-bd7a-6b469ffb9006)|![Simulator Screenshot - iPhone 16 Pro - 2025-02-27 at 10 27 47](https://github.com/user-attachments/assets/c367888f-6bc0-47e5-9171-56dc48179f05)|![Simulator Screenshot - iPhone 16 Pro - 2025-02-27 at 10 28 17](https://github.com/user-attachments/assets/ace1a433-f765-4313-8eda-d3103a9d9c49)|
+
+## Video
+https://github.com/user-attachments/assets/d7eb4d07-350d-4fa8-bae6-5a4d5b171ce3
 
 
 ##  Alternative Colors
