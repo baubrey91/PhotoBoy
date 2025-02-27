@@ -76,8 +76,6 @@ extension CGImage {
         // Create a Core Graphics image from the grayscale destination buffer.
         return try destinationBuffer2.createCGImage(format: monoFormat)
     }
-
-
 }
 
 private extension CGImage {

@@ -50,10 +50,10 @@ extension CGImage {
         for y in 0..<height {
             for x in 0..<width {
                 let index = y * width + x
-                guard let blackPixel = GreyScalePixelValues(rawValue: pixels[index].value) else {
+                guard let greyPixel = GreyScalePixelValues(rawValue: pixels[index].value) else {
                     throw ImageProcessorError.colorMapping
                 }
-                pixels[index] = blackPixel.colorCorrespondent()
+                pixels[index] = greyPixel.colorCorrespondent()
             }
         }
         
@@ -86,7 +86,7 @@ extension CGImage {
     // TODO: - Move to image processor
     public func cropImage() -> CGImage? {
         
-        let correctRatio = ImageProperties.height / 144
+        let correctRatio = ImageProperties.height / ImageProperties.width
         let scale = self.height / self.width
         
         guard scale != correctRatio else {

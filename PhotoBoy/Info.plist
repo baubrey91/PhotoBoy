@@ -6,17 +6,5 @@
 	<array>
 		<string>Retro Gaming.ttf</string>
 	</array>
-	<key>UILaunchScreen</key>
-	<dict>
-		<key>UILaunchScreen</key>
-		<array>
-			<dict>
-				<key>UIImageName</key>
-				<string></string>
-				<key>UILaunchScreenIdentifier</key>
-				<string></string>
-			</dict>
-		</array>
-	</dict>
 </dict>
 </plist>

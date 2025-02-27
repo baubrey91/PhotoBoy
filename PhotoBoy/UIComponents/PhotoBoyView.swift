@@ -132,10 +132,10 @@ struct PhotoBoyView: View {
                         Button(Styler.AUXButtons.saveTitle) {
                             viewModel.startButtonAction()
                         }
-                        ShareLink(
-                            item: Image(uiImage: viewModel.imageAsUIImage!),
-                            preview: SharePreview(Styler.productName, image: Image(uiImage: viewModel.imageAsUIImage!))
-                        )
+//                        ShareLink(
+//                            item: Image(uiImage: viewModel.imageAsUIImage!),
+//                            preview: SharePreview(Styler.productName, image: Image(uiImage: viewModel.imageAsUIImage!))
+//                        )
                     }
                 }
                 HStack {
