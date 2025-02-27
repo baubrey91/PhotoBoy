@@ -9,6 +9,9 @@ import SwiftUI
 
 extension CGImage {
     
+    /// This function works by going creating a buffer of all pixels, look at each pixel and determinind what color it is similiar to (I used a 1:1 mapping not a calculation
+    /// From there we replace the pixel with the coresponding green one
+    
     public func applyFilter() throws -> CGImage {
         
         let cgImage = self
@@ -21,6 +24,7 @@ extension CGImage {
         let height = Int(self.height)
         let bytesPerRow = width * 4
         
+        // Allocate memory
         let imageData = UnsafeMutablePointer<Pixel>.allocate(capacity: width * height)
         let pixels = UnsafeMutableBufferPointer<Pixel>(start: imageData, count: width * height)
         
@@ -46,7 +50,7 @@ extension CGImage {
             )
         )
         
-        
+        // Here is the main component where we iterate each pixel and map it to a new color
         for y in 0..<height {
             for x in 0..<width {
                 let index = y * width + x
@@ -57,6 +61,7 @@ extension CGImage {
             }
         }
         
+        // Now we turn the buffer to a new CGImage
         guard let context = CGContext(
             data: pixels.baseAddress,
             width: width,
@@ -75,43 +80,5 @@ extension CGImage {
             throw ImageProcessorError.makeImage
         }
         return newCGImage
-    }
- 
-//    public var asImage: Image {
-//        return Image(uiImage: UIImage(cgImage: self))
-//    }
-}
-
-extension CGImage {
-    // TODO: - Move to image processor
-    public func cropImage() -> CGImage? {
-        
-        let correctRatio = ImageProperties.height / ImageProperties.width
-        let scale = self.height / self.width
-        
-        guard scale != correctRatio else {
-//            self = image
-            return self
-        }
-
-        let cropHeight = scale > correctRatio
-        let height = cropHeight ? self.width * correctRatio : self.height
-        let width = cropHeight ? self.width : self.height * correctRatio
-        let origin = CGPoint(
-            x: cropHeight ? 0 : (self.width - width) / 2,
-            y: cropHeight ? (self.height - height) / 2 : 0
-        )
-        let size = CGSize(width: cropHeight ? self.width : width, height: cropHeight ? height : self.height)
-        
-        guard let croppedImage = self.cropping(to: CGRect(origin: origin, size: size)) else {
-//            error = PBError.cropping
-            
-//            presentingImage = nil
-            // TODO: - Return nil
-            return self
-        }
-        
-        return croppedImage
-//        presentingImage = croppedImage
     }
 }

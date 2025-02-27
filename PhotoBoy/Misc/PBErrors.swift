@@ -6,7 +6,7 @@
 //
 
 enum PBError: Error {
-    case loadTranser
+    case loadTransfer
     case cropping
 }
 

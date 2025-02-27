@@ -9,7 +9,7 @@ import SwiftUI
 import PhotosUI
 import PBImageProcessor
 
-final class PhotoBoyViewModel: ObservableObject {
+final class PhotoBoyViewModel: NSObject, ObservableObject {
     
     // MARK: - Enums
     
@@ -20,12 +20,14 @@ final class PhotoBoyViewModel: ObservableObject {
     
     // MARK: - Published Properties
     
-    @Published var presentingImage: CGImage? = nil// UIImage(named: "SampleImage")?.cgImage
-    @Published var error: Error? = nil
+    @Published var presentingImage: CGImage? = nil
     @Published var selectedImage: PhotosPickerItem?
     @Published var contrast: CGFloat = 1
     @Published var brightness: CGFloat = 0.0
     @Published var loading = false
+    @Published var error: Error? = nil
+    @Published var saveFinishedSuccesfully = false
+    @Published var isLoading = false
     
     // MARK: - Properties
     
@@ -42,7 +44,8 @@ final class PhotoBoyViewModel: ObservableObject {
     
     var imageDimensions: (width: CGFloat, height: CGFloat) {
         let screenWidth = UIScreen.main.bounds.size.width
-        let width = screenWidth * 0.6
+        let screenSizeFactor = 0.6
+        let width = screenWidth * screenSizeFactor
         let multiplier = CGFloat(ImageProperties.height) / CGFloat(ImageProperties.width)
         return (width, width * multiplier)
     }
@@ -58,15 +61,13 @@ final class PhotoBoyViewModel: ObservableObject {
     // MARK: - "A" Button
     
     func aButtonAction()  {
-        guard originalImage == nil,
+        guard resetNotNeeded(),
+              originalImage == nil,
               let image = presentingImage else { return }
+       
         originalImage = presentingImage
         playSound(sound: .powerUp)
-
-//        let start = CFAbsoluteTimeGetCurrent()
-//        let grayScaleTime = CFAbsoluteTimeGetCurrent() - start
-//        print("Took \(grayScaleTime) seconds")
-            
+        
         do {
             let grayScaleImage = try image.reduceAndDither()
             presentingImage = try grayScaleImage.applyFilter()
@@ -81,12 +82,14 @@ final class PhotoBoyViewModel: ObservableObject {
     // MARK: - "B" Button
     
     func bButtonAction() {
-        guard presentingImage != nil else { return }
+        guard resetNotNeeded(),
+              presentingImage != nil else { return }
         playSound(sound: .powerDown)
 
         if originalImage == nil {
             presentingImage = nil
-            selectedImage = nil
+            contrast = 1.0
+            brightness = 0.0
         } else {
             presentingImage = originalImage
             originalImage = nil
@@ -111,37 +114,74 @@ final class PhotoBoyViewModel: ObservableObject {
         }
     }
     
+    // MARK: - Select Button
+
     func selectButtonAction(selectButtonObject: Any) {
         guard let image = selectButtonObject as? UIImage,
               let cgImage = image.cgImage else { return }
         originalImage = nil
-        presentingImage = cgImage.cropImage()
-//        cropImage(image: cgImage)
+        do {
+            presentingImage = try cgImage.cropImage()
+        } catch let newError {
+            // TODO: - Log Error
+            error = newError
+        }
     }
     
+    // MARK: - Start Button
+    
     func startButtonAction() {
+        guard resetNotNeeded() else { return }
         if let image = imageAsUIImage {
-            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+            isLoading = true
+            UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveCompleted(_:didFinishSavingWithError:contextInfo:)), nil)
+        }
+    }
+    
+    @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        isLoading = false
+        if let newError = error {
+            self.error = newError
+        } else {
+            saveFinishedSuccesfully = true
         }
     }
     
     func imageImported() {
+        resetNotNeeded()
+        isLoading = true
         Task {
             guard let data = try? await selectedImage?.loadTransferable(type: Data.self),
                   let image = UIImage(data: data) else {
-                error = PBError.loadTranser
+                await MainActor.run {
+                    error = PBError.loadTransfer
+                    isLoading = false
+                }
                 return
             }
                 
             await MainActor.run {
                 originalImageOrentation = image.imageOrientation
                 selectButtonAction(selectButtonObject: image)
+                isLoading = false
             }
         }
     }
 }
 
 private extension PhotoBoyViewModel {
+    
+    @discardableResult
+    func resetNotNeeded() -> Bool {
+        if saveFinishedSuccesfully {
+            saveFinishedSuccesfully = false
+            return false
+        } else if error != nil {
+            error = nil
+            return false
+        }
+        return true
+    }
     
     func playSound(sound: Sounds) {
         if let soundURL = Bundle.main.url(forResource: sound.rawValue, withExtension: ".mp3") {

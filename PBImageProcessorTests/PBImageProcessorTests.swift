@@ -6,12 +6,15 @@
 //
 
 import Testing
+import UIKit
 @testable import PBImageProcessor
 
 struct PBImageProcessorTests {
 
     @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+        let image = UIImage(systemName: "wave.3.right")!.cgImage!
+        let reducedImage = try!image.reduceAndDither()
+        #expect(reducedImage.bitsPerPixel == 8)
     }
 
 }

@@ -8,11 +8,15 @@
 import Accelerate
 
 public enum ImageProperties {
-    public static let width = 144
+    public static let width = 160
     public static let height = 144
 }
 
 extension CGImage {
+    
+    
+    /// This stream takes the image and makes it a grayscale while 2 bit channels (00, 01, 10, 11) ie 4 different shades of gray
+    /// It also reduces it to a 160x144 image which is what the original gameboys were
     
     public func reduceAndDither() throws -> CGImage {
         // Declare the three coefficients that model the eye's sensitivity
@@ -39,10 +43,13 @@ extension CGImage {
         let preBias: [Int16] = [0, 0, 0, 0]
         let postBias: Int32 = 0
         
+        
+        // Create buffers
         var sourceBuffer = try vImageGetSourceBuffer()
         var destinationBuffer = try vImageGetDestBuffer(fromSourceBuffer: sourceBuffer, bitsPerPixel: 8)
         var destinationBuffer2 = try vImageGetDestBuffer(fromSourceBuffer: sourceBuffer, bitsPerPixel: 2)
         
+        // Convert from RGB to gray scale
         vImageMatrixMultiply_ARGB8888ToPlanar8(&sourceBuffer,
                                                &destinationBuffer,
                                                &coefficientsMatrix,
@@ -51,6 +58,9 @@ extension CGImage {
                                                postBias,
                                                vImage_Flags(kvImageNoFlags))
         
+        
+        // convert from 8 bit channel to 2 bit channel
+        // add Floyd Steinberg dithering to make image look better
   
         vImageConvert_Planar8toPlanar2(
             &destinationBuffer,
@@ -60,7 +70,7 @@ extension CGImage {
             vImage_Flags(kvImageNoFlags)
         )
         
-        // Create a 1-channel, 8-bit grayscale format that's used to
+        // Create a 2-channel, 8-bit grayscale format that's used to
         // generate a displayable image.
         guard let monoFormat = vImage_CGImageFormat(
             bitsPerComponent: 2,

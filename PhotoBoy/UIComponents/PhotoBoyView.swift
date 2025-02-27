@@ -32,6 +32,8 @@ struct PhotoBoyView: View {
                                 topTrailingRadius: Styler.Screen.screenCorners.default
                             )
                         )
+                    
+                    // MARK: - Power indicator
                     VStack {
                         HStack {
                             VStack(alignment: .trailing) {
@@ -50,13 +52,17 @@ struct PhotoBoyView: View {
                             Spacer()
                         }
                     }
+                    
+                    // MARK: - Screens
                     Rectangle()
                         .fill(Color.black)
                         .frame(
                             width: viewModel.imageDimensions.width + Styler.Screen.borderWidth,
                             height: viewModel.imageDimensions.height + Styler.Screen.borderWidth
                         )
-                    if let error = viewModel.error {
+                    if viewModel.saveFinishedSuccesfully {
+                        TextScreen(textScreenType: .saveComplete, dimensions: viewModel.imageDimensions)
+                    } else if let error = viewModel.error {
                         ErrorScreen(dimensions: viewModel.imageDimensions, error: error)
                     } else if let image = viewModel.imageAsUIImage {
                         Image(uiImage: image)
@@ -72,7 +78,11 @@ struct PhotoBoyView: View {
                                 )
                                 .clipped()
                     } else {
-                        InstructionsScreen(dimensions: viewModel.imageDimensions)
+                        TextScreen(textScreenType: .controls ,dimensions: viewModel.imageDimensions)
+                    }
+                    if viewModel.isLoading {
+                        ActivityIndicator()
+                            .foregroundColor(Color.white.opacity(0.8))
                     }
                 }
                 .frame(
@@ -89,6 +99,8 @@ struct PhotoBoyView: View {
                                 height: Styler.Logo.frame.height
                             )
                     )
+                
+                // MARK: - Pad and Buttons
                 HStack {
                     DirectionPad(
                         directionPadAction: viewModel.directionPadAction
@@ -111,6 +123,8 @@ struct PhotoBoyView: View {
                 }
                 .padding(.top, Styler.buttonsPaddingTop)
                 .padding(.bottom, Styler.buttonsPaddingBottom)
+                
+                // MARK: - Select Start buttons
                 HStack {
                     PhotosPicker(
                         selection: $viewModel.selectedImage,
@@ -132,24 +146,26 @@ struct PhotoBoyView: View {
                         Button(Styler.AUXButtons.saveTitle) {
                             viewModel.startButtonAction()
                         }
-//                        ShareLink(
-//                            item: Image(uiImage: viewModel.imageAsUIImage!),
-//                            preview: SharePreview(Styler.productName, image: Image(uiImage: viewModel.imageAsUIImage!))
-//                        )
+                        if let image = self.viewModel.imageAsUIImage {
+                            ShareLink(
+                                item: Image(uiImage: image),
+                                preview: SharePreview(Styler.productName, image: Image(uiImage: viewModel.imageAsUIImage!))
+                            )
+                        }
                     }
                 }
+                
+                // MARK: - Brightness Contrast indicators
                 HStack {
-                    Text(viewModel.brightnessString)
-                        .modifier(RetroText())
-                    Text(viewModel.contrastString)
-                        .modifier(RetroText())
+                    Spacer()
+                    VStack {
+                        Text(viewModel.brightnessString)
+                            .modifier(RetroText(width: viewModel.imageDimensions.width))
+                        Text(viewModel.contrastString)
+                            .modifier(RetroText(width: viewModel.imageDimensions.width))
+                    }
+                    .padding(.top, Styler.bottomPadding)
                 }
-                .padding(.top, Styler.bottomPadding)
-            }
-     
-            .onAppear {
-                // TODO: Remove
-//                viewModel.cropImage(image: viewModel.presentingImage!)
             }
         }
         .edgesIgnoringSafeArea(.all)
@@ -162,7 +178,7 @@ private enum Styler {
     static let bButtonOffset: CGFloat = 30
     static let dPadWidth: CGFloat = 125
     static let buttonsPaddingTop = 25.0
-    static let buttonsPaddingBottom = 20.0
+    static let buttonsPaddingBottom = 40.0
     static let bottomPadding = 50.0
     static let productName = "Photo Boy"
     
@@ -191,7 +207,6 @@ private enum Styler {
         static let stroke = Color.black.opacity(0.25)
         static let lineWidth = 0.25
         static let frame = (width: 120.0, height: 30.0)
-
     }
     
     enum AUXButtons {
@@ -200,6 +215,6 @@ private enum Styler {
         static let angle = Angle(degrees: 325)
         static let actionSheetTitle = "Export Options"
         static let saveTitle = "Save"
-
     }
 }
+

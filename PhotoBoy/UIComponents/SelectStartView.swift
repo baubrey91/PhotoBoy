@@ -6,11 +6,11 @@
 //
 
 import SwiftUICore
-import SwiftUI
-
-#Preview {
-    SelectStartView(text: "Select")
-}
+//import SwiftUI
+//
+//#Preview {
+//    SelectStartView(text: "Select")
+//}
 
 struct SelectStartView: View {
     let text: String
@@ -18,18 +18,27 @@ struct SelectStartView: View {
     var body: some View {
         VStack {
             Capsule()
-                .frame(width: 50, height: 10)
-                .foregroundColor(.gray.opacity(0.9))
+                .frame(width: Styler.frame.width, height: Styler.frame.height)
+                .foregroundColor(Styler.capsuleForegroundColor)
                 .overlay {
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(.black, lineWidth: 2)
+                    RoundedRectangle(cornerRadius: Styler.cornerRadius)
+                        .stroke(Styler.border.color, lineWidth: Styler.border.lineWidth)
                 }
 
             Text(text.uppercased())
-                .font(.custom("Retro Gaming", size: 12))
-                .foregroundColor(.black.opacity(0.3))
+                .font(Styler.font)
+                .foregroundColor(Styler.textForegroundColor)
         }
     }
+}
+
+private enum Styler {
+    static let frame = (width: 50.0, height: 10.0)
+    static let capsuleForegroundColor = Color.gray.opacity(0.9)
+    static let cornerRadius: CGFloat = 16
+    static let border = (color: Color.black, lineWidth: 2.0)
+    static let font: Font = .custom("Retro Gaming", size: 12.0)
+    static let textForegroundColor: Color = .black.opacity(0.3)
 }
 
 

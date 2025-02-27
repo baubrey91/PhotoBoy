@@ -11,4 +11,5 @@ enum ImageProcessorError: Error {
     case makeContext
     case colorMapping
     case makeImage
+    case cropping
 }
