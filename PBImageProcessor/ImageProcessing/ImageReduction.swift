@@ -8,8 +8,8 @@
 import Accelerate
 
 public enum ImageProperties {
-    public static let width = 160
-    public static let height = 144
+    public static let width = 160.0
+    public static let height = 144.0
 }
 
 extension CGImage {
@@ -102,8 +102,8 @@ private extension CGImage {
         var sourceImageBuffer = try vImage_Buffer(cgImage: self, format: format)
 
         
-        var scaledBuffer = try vImage_Buffer(width: ImageProperties.width,
-                                             height: ImageProperties.height,
+        var scaledBuffer = try vImage_Buffer(width: Int(ImageProperties.width),
+                                             height: Int(ImageProperties.height),
                                              bitsPerPixel: format.bitsPerPixel)
         defer {
             sourceImageBuffer.free()
@@ -118,8 +118,8 @@ private extension CGImage {
     
     func vImageGetDestBuffer(fromSourceBuffer sourceBuffer: vImage_Buffer, bitsPerPixel: UInt32) throws -> vImage_Buffer {
         try vImage_Buffer(
-            width: ImageProperties.width,
-            height: ImageProperties.height,
+            width: Int(ImageProperties.width),
+            height: Int(ImageProperties.height),
             bitsPerPixel: bitsPerPixel
         )
     }

@@ -11,7 +11,9 @@ extension CGImage {
     public func cropImage() throws -> CGImage? {
         
         let correctRatio = ImageProperties.height / ImageProperties.width
-        let scale = self.height / self.width
+        let originalWidth = CGFloat(self.width)
+        let originalHeight = CGFloat(self.height)
+        let scale = originalHeight / originalWidth
         
         // If image is correct ratio no need to crop
         guard scale != correctRatio else {
@@ -20,15 +22,15 @@ extension CGImage {
 
         // Ff scale is larger than ratio we need to crop the top and bottom else left and right sides
         let cropHeight = scale > correctRatio
-        let height = cropHeight ? self.width * correctRatio : self.height
-        let width = cropHeight ? self.width : self.height * correctRatio
+        let height = cropHeight ? originalWidth * correctRatio : originalHeight
+        let width = cropHeight ? originalWidth : originalHeight * correctRatio
         
         // Find center
         let origin = CGPoint(
-            x: cropHeight ? 0 : (self.width - width) / 2,
-            y: cropHeight ? (self.height - height) / 2 : 0
+            x: cropHeight ? 0 : (originalWidth - width) / 2,
+            y: cropHeight ? (originalHeight - height) / 2 : 0
         )
-        let size = CGSize(width: cropHeight ? self.width : width, height: cropHeight ? height : self.height)
+        let size = CGSize(width: cropHeight ? originalWidth : width, height: cropHeight ? height : originalHeight)
         
         // This finds a frame within the image and turns it into a CGImage
         guard let croppedImage = self.cropping(to: CGRect(origin: origin, size: size)) else {
